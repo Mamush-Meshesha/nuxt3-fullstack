@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "@apollo/client": "^3.9.0",
+    "@cloudinary/url-gen": "^1.16.0",
+    "@nuxtjs/cloudinary": "^2.5.2",
+    "@types/node": "^20.11.16",
+    "graphql": "^16.8.1",
+    "graphql-tag": "^2.12.6",
+    "primevue": "^3.47.2",
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "nuxt-primevue": "^0.2.2"
+  }
+}

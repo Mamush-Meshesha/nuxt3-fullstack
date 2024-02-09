@@ -1,0 +1,26 @@
+-- Could not auto-generate a down migration.
+-- Please write an appropriate down migration for the SQL below:
+-- CREATE OR REPLACE FUNCTION public.post_likes(post_row posts, hasura_session json)
+--  RETURNS boolean
+--  LANGUAGE sql
+--  STABLE
+-- AS $function$
+-- SELECT EXISTS (
+--     SELECT 1
+--     FROM likes A
+--     WHERE A.user_id = CAST((hasura_session ->> 'x-hasura-user-id') as INTEGER)  AND A.post_id = post_row.id
+-- );
+-- $function$;
+--
+--
+-- CREATE OR REPLACE FUNCTION public.post_bookmarks(post_row posts, hasura_session json)
+--  RETURNS boolean
+--  LANGUAGE sql
+--  STABLE
+-- AS $function$
+-- SELECT EXISTS (
+--     SELECT 1
+--     FROM bookmarks A
+--     WHERE A.user_id = CAST((hasura_session ->> 'x-hasura-user-id') as INTEGER)  AND A.post_id = post_row.id
+-- );
+-- $function$;
