@@ -20,12 +20,19 @@ export default defineNuxtConfig({
       },
     ],
   ],
-    build: {
-    transpile: [
-      '@apollo/client',
-      'ts-invariant/process',
-    ],
-  },
+  //   build: {
+  //   transpile: [
+  //     '@apollo/client',
+  //     'ts-invariant/process',
+  //   ],
+  // },
+  routes: [
+    {
+      path: '/posts/:id',
+      component: '~/pages/compage/[id].vue',
+    },
+  ],
+   
   cloudinary: {
     cloudName: 'dmjtytstd'
   },
@@ -48,13 +55,14 @@ export default defineNuxtConfig({
     authHeader: "Authorization",
     clients: {
       default: {
-        httpEndpoint: 'http://localhost:8180/v1/graphql',
-        browserHttpEndpoint: 'http://localhost:8180/v1/graphql',
-        tokenName: 'apollo:accessToken',
-        tokenStorage: 'localStorage',
-        authType: 'Bearer',
-        authHeader: 'Authorization'
-      }
+        httpEndpoint: "http://localhost:8180/v1/graphql",
+        tokenStorage: "cookie",
+        authHeader: "Authorization",
+        tokenName: "accessToken",
+        httpLinkOptions: {},
+        defaultOptions: {},
+        inMemoryCacheOptions: {},
+     }
     }
   },
  primevue: {

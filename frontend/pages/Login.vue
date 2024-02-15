@@ -74,28 +74,21 @@ const LOGIN_USER = gql`
 `;
 const { mutate: UserLogin, onDone, onError } = useMutation(LOGIN_USER);
 
-// definePageMeta({
-//   middleware: "already-auth"
-// })
-const { getToken, onLogin } = useApollo();
+const { getToken, onLogin, onLogout } = useApollo();
 const login = async () => {
   try {
     const res = await UserLogin({
       email: email.value,
       password: password.value,
     });
-    await onLogin(res?.data.login.accessToken);
+
+   onLogin(res?.data.login.accessToken);
     console.log(res?.data.login.accessToken);
     router.push("/home");
   } catch (error) {
     console.error(error);
   }
 };
-
-// const { mutate: UserLogin, onDone, onError } = useMutation(LOGIN_USER);
-// const { onLogin, getToken } = useApollo();
-
-// vee-validate
 
 import * as z from "zod";
 import { useField, useForm } from "vee-validate";
@@ -120,26 +113,6 @@ const { handleSubmit, errors } = useForm({
   validationSchema,
 });
 
-// const { value: email } = useField("email");
-// const { value: password } = useField("password");
 
-// const handleLogin = async () => {
-//   try {
-//     const res = await UserLogin({
-//       email: email.value,
-//       password: password.value,
-//     });
 
-//     // // Access token from response data
-//     // const token = res.data.login.accessToken;
-//     // console.log(token);
-//     // Option 1: Use `onLogin` for automatic cookie storage
-//     await onLogin(res.data.login.accessToken); // Recommended approach
-
-//     router.push("/home");
-//     // ... rest of your code
-//   } catch (error) {
-//     // Handle errors gracefully
-//   }
-// };
 </script>

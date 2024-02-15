@@ -1,7 +1,7 @@
 <template>
   <div class="h-20 border border-[#2ba5ca] flex items-center">
     <div class="flex justify-between w-[97%]">
-      <div class="flex gap-3 p-6">
+      <div class="flex gap-3 p-6" v-for="user in data.profile" :key="user.id">
         <div class="relative">
           <img
             src="https://a.storyblok.com/f/191576/1200x800/215e59568f/round_profil_picture_after_.webp"
@@ -13,7 +13,9 @@
           ></div>
         </div>
         <div>
-          <h1 class="text-xl">Mamush Meshesha</h1>
+          <h1 class="text-xl">
+            {{ user.first_name }} {{ user.last_name }}
+          </h1>
           <h1 class="capitalize text-xs">active now</h1>
         </div>
       </div>
@@ -44,4 +46,24 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup>
+import gql from "graphql-tag";
+
+const Profile_Query = gql`
+  query MyQuery {
+    profile {
+      age
+      education_level
+      first_name
+      gender
+      id
+      last_name
+      middle_name
+      url
+      user_id
+    }
+  }
+`;
+
+const { data } = useAsyncQuery(Profile_Query);
+</script>

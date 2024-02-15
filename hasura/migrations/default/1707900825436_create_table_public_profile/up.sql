@@ -1,0 +1,1 @@
+CREATE TABLE "public"."profile" ("id" serial NOT NULL, "first_name" text NOT NULL, "last_name" text NOT NULL, "middle_name" text NOT NULL, "age" integer NOT NULL, "gender" text NOT NULL, "education_level" text NOT NULL, PRIMARY KEY ("id") );

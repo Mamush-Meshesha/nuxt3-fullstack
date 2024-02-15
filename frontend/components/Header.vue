@@ -13,7 +13,7 @@
         <div>
           <RouterLink
             to="/"
-            class="md:w-[290px] w-[10%] h-14 rounded-l-xl hover:bg-[#000] focus:text-black text-xl flex items-center px-10"
+            class="md:w-[100px] md:w-[200px] w-[10%] h-14 rounded-l-xl hover:bg-[#000] focus:text-black text-xl flex items-center px-10"
           >
             <button class="hidden md:block">Get Started</button>
             <button class="md:hidden block"> 
@@ -34,7 +34,7 @@
           </RouterLink>
           <RouterLink
             to="/post"
-            class="w-[290px] h-14 rounded-l-xl hover:bg-[#000] focus:text-black text-xl flex items-center px-10"
+            class="w-[100px] md:w-[200px] h-14 rounded-l-xl hover:bg-[#000] focus:text-black text-xl flex items-center px-10"
           >
             <button class="hidden md:block">Home</button>
             <button class="md:hidden block">
@@ -59,25 +59,25 @@
           </RouterLink>
           <RouterLink
             to="/"
-            class="w-[290px] h-14 rounded-l-xl hover:bg-[#000] focus:text-black text-xl flex items-center px-10"
+            class="w-[100px] md:w-[200px] h-14 rounded-l-xl hover:bg-[#000] focus:text-black text-xl flex items-center px-10"
           >
             <button>Chat</button>
           </RouterLink>
           <RouterLink
             to="/"
-            class="w-[290px] h-14 rounded-l-xl hover:bg-[#000] focus:text-black text-xl flex items-center px-10"
+            class="w-[100px] md:w-[200px] h-14 rounded-l-xl hover:bg-[#000] focus:text-black text-xl flex items-center px-10"
           >
             <button>Post</button>
           </RouterLink>
           <RouterLink
             to="/"
-            class="w-[290px] h-14 rounded-l-xl hover:bg-[#000] focus:text-black text-xl flex items-center px-10"
+            class="w-[100px] md:w-[200px] h-14 rounded-l-xl hover:bg-[#000] focus:text-black text-xl flex items-center px-10"
           >
             <button>Services</button>
           </RouterLink>
           <RouterLink
             to="/"
-            class="w-[290px] h-14 rounded-l-xl hover:bg-[#000] focus:text-black text-xl flex items-center px-10"
+            class="w-[100px] md:w-[200px] h-14 rounded-l-xl hover:bg-[#000] focus:text-black text-xl flex items-center px-10"
           >
             <button>About Me</button>
           </RouterLink>
@@ -146,7 +146,9 @@
                 <button>Add Other Account</button>
               </div>
               <div>
-                <Logout />
+               <form @submit.prevent="handleLogout">
+                <button type="submit" class="px-2 py-1 border">Logout</button>
+               </form>
               </div>
             </div>
           </div>
@@ -159,6 +161,7 @@
 <script setup>
 import { ref } from "vue";
 const Profile = ref(false);
+const router = useRouter()
 
 const showProfile = () => {
   Profile.value = !Profile.value;
@@ -174,4 +177,13 @@ const colorMode = useColorMode();
 const toggleTheme = () => {
   colorMode.preference = colorMode.preference === "dark" ? "light" : "dark";
 };
+
+const { onLogout } = useApollo()
+
+const handleLogout = async () => {
+  await onLogout()
+  router.push("/login")
+}
+
+
 </script>

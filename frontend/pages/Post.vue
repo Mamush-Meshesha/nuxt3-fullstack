@@ -3,17 +3,11 @@
     <div
       class="w-[50%] ml-[22%] dark:bg-[#0F172A] h-[600px] border rounded-md flex justify-center"
     >
+    lorem30
       <div>
         <h1 class="text-xl pt-4 capitalize">what's on your mind?</h1>
-        <input
-          v-model="user_id"
-          type="number"
-          name=""
-          id=""
-          class="text-xl px-3 outline-none border"
-        />
-        <div class="py-4">
-          <input
+        <form @submit.prevent="handleUserPost" class="py-4">
+          <input v-model="descriptions"
             type="text"
             placeholder="Write your feeling..."
             class="text-xl px-3 h-[300px] pb-52 w-[500px] border pt-0 outline-none rounded-md"
@@ -60,25 +54,21 @@
                 </button>
               </div>
             </label>
-            <!-- <FileUpload mode="basic"  accept="image/*"
-            :maxFileSize="1000000" @upload="handleFileUpload" life:
-            3000 /> -->
           </div>
           <div class="float-right py-6">
-            <button
-              @click="handleUserPost"
+            <button type="sumbit" @click="handleUserPost"
               class="px-5 py-2 bg-[#391fcc] text-white rounded-md"
             >
               Post
             </button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { useToast } from "primevue/usetoast";
 
 const toast = useToast();
@@ -103,7 +93,6 @@ const apiSecret = process.env.VUE_APP_CLOUDINARY_API_SECRET;
 
 const descriptions = ref("");
 const imageUrl = ref("");
-const user_id = ref("");
 const cld = new Cloudinary({
   cloud: {
     cloudName: cloudName,
@@ -112,7 +101,7 @@ const cld = new Cloudinary({
   },
 });
 
-const handleFileUpload = (event: any) => {
+const handleFileUpload = (event) => {
   selectedFile.value = event.target.files[0];
 };
 
@@ -151,9 +140,9 @@ import { useMutation } from "@vue/apollo-composable";
 import gql from "graphql-tag";
 
 const MUTATION_POST = gql`
-  mutation userPost($descriptions: String, $url: String, $user_id: Int!) {
+  mutation userPost($descriptions: String, $url: String, ) {
     insert_posts_one(
-      object: { descriptions: $descriptions, url: $url, user_id: $user_id }
+      object: { descriptions: $descriptions, url: $url }
     ) {
       descriptions
       id
@@ -170,7 +159,6 @@ const handleUserPost = async () => {
     await userPost({
       descriptions: descriptions.value,
       url: imageUrl.value,
-      user_id: user_id.value,
     });
     toast.add({
       severity: "success",
@@ -183,29 +171,6 @@ const handleUserPost = async () => {
   }
   console.log(userPost);
 };
-// posts graphql queries
-const CREATE_POST = gql`
-  mutation MyMutation(
-    $id: Int!
-    $url: String
-    $user_id: Int!
-    $descriptions: String!
-  ) {
-    insert_posts_one(
-      object: {
-        id: $id
-        url: $url
-        user_id: $user_id
-        descriptions: $descriptions
-      }
-    ) {
-      id
-      url
-      user_id
-      descriptions
-    }
-  }
-`;
 </script>
 
 <style scoped>

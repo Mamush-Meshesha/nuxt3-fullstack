@@ -27,13 +27,6 @@ array_relationships:
         table:
           name: likes
           schema: public
-  - name: likesByUserId
-    using:
-      foreign_key_constraint_on:
-        column: user_id
-        table:
-          name: likes
-          schema: public
 computed_fields:
   - name: is_booked
     definition:
@@ -48,52 +41,31 @@ computed_fields:
         schema: public
       session_argument: hasura_session
 insert_permissions:
-  - role: anonymous
-    permission:
-      check: {}
-      columns:
-        - id
-        - user_id
-        - descriptions
-        - url
-        - created_at
-        - updated_at
-    comment: ""
   - role: user
     permission:
       check: {}
       set:
         user_id: x-hasura-User-Id
       columns:
-        - created_at
-        - descriptions
         - id
-        - updated_at
-        - url
         - user_id
+        - descriptions
+        - url
+        - created_at
+        - updated_at
     comment: ""
 select_permissions:
-  - role: anonymous
-    permission:
-      columns:
-        - created_at
-        - descriptions
-        - id
-        - updated_at
-        - url
-        - user_id
-      filter: {}
-      allow_aggregations: true
-    comment: ""
   - role: user
     permission:
       columns:
-        - created_at
-        - descriptions
         - id
-        - updated_at
-        - url
         - user_id
+        - descriptions
+        - url
+        - created_at
+        - updated_at
+      computed_fields:
+        - is_booked
+        - is_liked
       filter: {}
-      allow_aggregations: true
     comment: ""

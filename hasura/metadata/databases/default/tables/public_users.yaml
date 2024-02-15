@@ -16,6 +16,20 @@ array_relationships:
         table:
           name: comments
           schema: public
+  - name: is_actives
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: is_active
+          schema: public
+  - name: likes
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: likes
+          schema: public
   - name: posts
     using:
       foreign_key_constraint_on:
@@ -23,12 +37,14 @@ array_relationships:
         table:
           name: posts
           schema: public
+  - name: profiles
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: profile
+          schema: public
 insert_permissions:
-  - role: anonymous
-    permission:
-      check: {}
-      columns: []
-    comment: ""
   - role: user
     permission:
       check: {}
@@ -41,19 +57,15 @@ insert_permissions:
         - username
     comment: ""
 select_permissions:
-  - role: anonymous
-    permission:
-      columns: []
-      filter: {}
-    comment: ""
   - role: user
     permission:
       columns:
+        - id
         - email
         - first_name
-        - id
         - last_name
         - password
         - username
       filter: {}
+      allow_aggregations: true
     comment: ""
