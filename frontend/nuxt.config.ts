@@ -65,7 +65,15 @@ export default defineNuxtConfig({
      }
     }
   },
-
+  nitro: {
+    storage: {
+      data: {
+        driver: 'vercelKV'
+        /* Vercel KV driver options */
+      }
+    },
+  },
+  
  primevue: {
     options: { styled: true },
     importPT: { as: 'Lara', from: path.resolve(__dirname, './presets/lara/') },
