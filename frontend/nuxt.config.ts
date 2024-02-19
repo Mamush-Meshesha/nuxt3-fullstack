@@ -74,10 +74,6 @@ export default defineNuxtConfig({
     },
   },
   
- primevue: {
-    options: { styled: true },
-    importPT: { as: 'Lara', from: path.resolve(__dirname, './presets/lara/') },
-  },
   tailwindcss: {
     config: {
       content: [
