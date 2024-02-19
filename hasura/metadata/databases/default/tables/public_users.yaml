@@ -57,6 +57,11 @@ insert_permissions:
         - username
     comment: ""
 select_permissions:
+  - role: anonymous
+    permission:
+      columns: []
+      filter: {}
+    comment: ""
   - role: user
     permission:
       columns:
@@ -68,4 +73,24 @@ select_permissions:
         - username
       filter: {}
       allow_aggregations: true
+    comment: ""
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - id
+        - email
+        - first_name
+        - last_name
+        - password
+        - username
+      filter: {}
+      check: null
+    comment: ""
+delete_permissions:
+  - role: user
+    permission:
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
     comment: ""

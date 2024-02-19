@@ -40,10 +40,9 @@
       <div class="flex flex-col gap-5">
         <h1 class="text-xl">Groups</h1>
         <div v-for="user in data?.users" :key="user.id">
-          {{ user.first_name}} <br>
+          {{ user.first_name}}
           {{ user.last_name}}
-         {{ user.username}} <br>
-          {{ user.email}}
+       
         </div>
       </div>
     </div>

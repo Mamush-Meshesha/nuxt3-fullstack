@@ -1,9 +1,12 @@
 <script setup>
 import gql from "graphql-tag";
 import { useRoute } from "vue-router";
+import { useToast } from "primevue/usetoast";
 import { ref } from "vue";
 
+const toast = useToast();
 const visible = ref(false);
+const comment = ref("");
 const routes = useRoute();
 const useroute = routes.params.id;
 
@@ -82,6 +85,17 @@ const DELETE_BOOKED = gql`
   }
 `;
 
+//comments mutation
+
+const USER_COMMENT = gql`
+  mutation usersComment($post_id: Int!, $comment: String!) {
+    insert_comments_one(object: { post_id: $post_id, comment: $comment }) {
+      comment
+      id
+    }
+  }
+`;
+
 //likes query
 const USERS_LIKE = gql`
   mutation userLike($post_id: Int!) {
@@ -107,6 +121,7 @@ const { mutate: deleteBooked } = useMutation(DELETE_BOOKED);
 const { mutate: userBookmark } = useMutation(USER_BOOKMARK);
 const { mutate: deleteLike } = useMutation(DELETE_LIKE);
 const { mutate: userLike } = useMutation(USERS_LIKE);
+const { mutate: usersComment } = useMutation(USER_COMMENT);
 //users like, comment. bookmarks
 
 const handleLikes = async (post_id, is_liked) => {
@@ -143,6 +158,28 @@ const handleBookmark = async (post_id, is_booked) => {
     console.log(error);
   }
 };
+
+const handleComment = async (post_id) => {
+  try {
+    await usersComment({
+      post_id: post_id,
+      comment: comment.value,
+    });
+    comment.value = ""
+    toast.add({
+      severity: "success",
+      summary: "Success Message",
+      detail: "Sussesfully Posted",
+      life: 3000,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+definePageMeta({
+  middleware: ["auth"]
+})
 </script>
 <template>
   <div>
@@ -150,7 +187,7 @@ const handleBookmark = async (post_id, is_booked) => {
       class="lg:w-[50%] w-[100%] dark:bg-[#0F172A] dark:text-white min-h-screen ml-[20%]"
     >
       <Search />
-      <div class="pt-20" v-for="user in data.users" :key="user.id">
+      <div class="pt-20" v-for="user in data?.users" :key="user.id">
         <div v-for="post in user.posts" :key="post.id" class="border">
           <div>
             <FrontHead />
@@ -158,7 +195,7 @@ const handleBookmark = async (post_id, is_booked) => {
           <div v-if="post">
             <div v-if="!isFullTextShown">
               <h1 class="px-4">
-                {{ truncated }}
+               
               </h1>
               <button
                 @click="isFullTextShown = true"
@@ -188,11 +225,11 @@ const handleBookmark = async (post_id, is_booked) => {
                 @click="handleLikes(post.id, post.is_liked)"
                 class="flex gap-3 items-center"
               >
-                <svg
+                <svg class="dark:fill-[#cfc5c5] "
                   width="30px"
                   height="30px"
                   viewBox="0 0 24 24"
-                  fill="none"
+                  fill="#000"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -209,9 +246,9 @@ const handleBookmark = async (post_id, is_booked) => {
               </button>
 
               <div class="card flex justify-content-center">
-                <Button @click="visible = true">
-                  <svg
-                    fill="#000000"
+                <Button @click="visible = true" class="dark:border-none">
+                  <svg class="dark:fill-[#cfc5c5] "
+                    fill="#000"
                     width="30px"
                     height="30px"
                     viewBox="0 0 32 32"
@@ -225,46 +262,51 @@ const handleBookmark = async (post_id, is_booked) => {
                   </svg>
                 </Button>
 
-                <Dialog
-                  v-model:visible="visible"
-                  modal
-                  :style="{ width: '40rem' }"
-                >
-                  <div class="flex align-items-center flex-col gap-3 mb-3">
-                    <label for="username" class="font-semibold w-6rem"
-                      >comments</label
-                    >
-                    <InputText
-                      id="username"
-                      class="flex-auto h-16"
-                      autocomplete="off"
-                      placeholder="Write your comments ..."
-                    />
-                  </div>
+                <form class="flex gap-3 items-center">
+                  <Dialog
+                    v-model:visible="visible"
+                    modal
+                    :style="{ width: '40rem' }"
+                  >
+                    <div class="flex align-items-center flex-col gap-3 mb-3">
+                      <label for="username" class="font-semibold w-6rem"
+                        >comments</label
+                      >
+                      <InputText
+                        v-model="comment"
+                        id="username"
+                        class="flex-auto h-16"
+                        autocomplete="off"
+                        placeholder="Write your comments ..."
+                      />
+                    </div>
 
-                  <div class="flex justify-between gap-2">
-                    <Button
-                      class="bg-[#ba3030] hover:text-[#000]"
-                      type="button"
-                      label="Cancel"
-                      severity="secondary"
-                      @click="visible = false"
-                      >cancel</Button
-                    >
-                    <Button
-                      type="button"
-                      class="bg-[#147960] hover:text-[#000]"
-                      @click="visible = false"
-                    >
-                      send
-                    </Button>
-                  </div>
-                </Dialog>
+                    <div class="flex justify-between gap-2">
+                      <Button
+                        class="bg-[#ba3030] hover:text-[#000] "
+                        type="button"
+                        label="Cancel"
+                        severity="secondary"
+                        @click="visible = false"
+                        >cancel</Button
+                      >
+                      <Button @click="handleComment(post.id)" @click.prevent="visible=false"
+                        type="submit"
+                        class="bg-[#147960] hover:text-[#000]"
+                       
+                      >
+                        send
+                      </Button>
+                    </div>
+                  </Dialog>
+                  {{ post.comments_aggregate.aggregate.count }}
+                </form>
               </div>
               <button class="flex items-center">
-                <svg
+                <svg class="dark:fill-[#cfc5c5] "
                   height="30px"
                   width="30px"
+                  fill="#000"
                   version="1.1"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 512 512"
@@ -283,7 +325,7 @@ const handleBookmark = async (post_id, is_booked) => {
                 @click="handleBookmark(post.id, post.is_booked)"
                 class="flex gap-3 items-center"
               >
-                <svg
+                <svg class="dark:fill-[#cfc5c5] "
                   width="30px"
                   height="30px"
                   viewBox="0 0 24 24"

@@ -9,6 +9,8 @@ insert_permissions:
   - role: user
     permission:
       check: {}
+      set:
+        user_id: x-hasura-User-Id
       columns:
         - age
         - id
@@ -25,13 +27,40 @@ select_permissions:
     permission:
       columns:
         - age
+        - education_level
+        - email
+        - first_name
+        - gender
+        - id
+        - last_name
+        - middle_name
+        - url
+        - user_id
+      filter: {}
+    comment: ""
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - age
         - id
         - user_id
         - education_level
+        - email
         - first_name
         - gender
         - last_name
         - middle_name
         - url
       filter: {}
+      check: null
+      set:
+        user_id: x-hasura-User-id
+    comment: ""
+delete_permissions:
+  - role: user
+    permission:
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
     comment: ""

@@ -1,9 +1,8 @@
 <template>
   <div>
     <div
-      class="w-[50%] ml-[22%] dark:bg-[#0F172A] h-[600px] border rounded-md flex justify-center"
+      class="w-[50%] ml-[22%] dark:bg-[#0F172A] mt-[7%] h-[600px] border rounded-md flex justify-center"
     >
-    lorem30
       <div>
         <h1 class="text-xl pt-4 capitalize">what's on your mind?</h1>
         <form @submit.prevent="handleUserPost" class="py-4">
@@ -171,6 +170,9 @@ const handleUserPost = async () => {
   }
   console.log(userPost);
 };
+definePageMeta({
+  middleware: ["auth"]
+})
 </script>
 
 <style scoped>

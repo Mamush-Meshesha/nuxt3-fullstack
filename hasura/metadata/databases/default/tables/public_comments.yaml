@@ -11,9 +11,7 @@ object_relationships:
 insert_permissions:
   - role: user
     permission:
-      check:
-        id:
-          _eq: X-Hasura-User-Id
+      check: {}
       set:
         user_id: x-hasura-User-Id
       columns:
@@ -42,4 +40,23 @@ select_permissions:
         - created_at
       filter: {}
       allow_aggregations: true
+    comment: ""
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - id
+        - post_id
+        - user_id
+        - comment
+        - created_at
+      filter: {}
+      check: null
+      set:
+        user_id: x-hasura-User_Id
+    comment: ""
+delete_permissions:
+  - role: user
+    permission:
+      filter: {}
     comment: ""

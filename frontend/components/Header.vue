@@ -13,10 +13,10 @@
         <div>
           <RouterLink
             to="/"
-            class="md:w-[100px] md:w-[200px] w-[10%] h-14 rounded-l-xl hover:bg-[#000] focus:text-black text-xl flex items-center px-10"
+            class="md:w-[200px] w-[10%] h-14 rounded-l-xl hover:bg-[#000] focus:text-black text-xl flex items-center px-10"
           >
             <button class="hidden md:block">Get Started</button>
-            <button class="md:hidden block"> 
+            <button class="md:hidden block">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 id="Layer_1"
@@ -33,7 +33,7 @@
             </button>
           </RouterLink>
           <RouterLink
-            to="/post"
+            to="/home"
             class="w-[100px] md:w-[200px] h-14 rounded-l-xl hover:bg-[#000] focus:text-black text-xl flex items-center px-10"
           >
             <button class="hidden md:block">Home</button>
@@ -64,7 +64,7 @@
             <button>Chat</button>
           </RouterLink>
           <RouterLink
-            to="/"
+            to="/post"
             class="w-[100px] md:w-[200px] h-14 rounded-l-xl hover:bg-[#000] focus:text-black text-xl flex items-center px-10"
           >
             <button>Post</button>
@@ -146,12 +146,19 @@
                 <button>Add Other Account</button>
               </div>
               <div>
-               <form @submit.prevent="handleLogout">
-                <button type="submit" class="px-2 py-1 border">Logout</button>
-               </form>
+                <form @submit.prevent="handleLogout">
+                  <button type="submit" class="px-2 py-1 border">Logout</button>
+                </form>
               </div>
             </div>
           </div>
+        </div>
+        <div v-for="user in data?.users" :key="user.id">
+          <ul v-for="profile in user.profiles" :key="profile.id" class="dark:text-white">
+            <span> 
+              {{ profile.email }}
+              </span>  
+          </ul>
         </div>
       </div>
     </div>
@@ -161,7 +168,7 @@
 <script setup>
 import { ref } from "vue";
 const Profile = ref(false);
-const router = useRouter()
+const router = useRouter();
 
 const showProfile = () => {
   Profile.value = !Profile.value;
@@ -178,12 +185,29 @@ const toggleTheme = () => {
   colorMode.preference = colorMode.preference === "dark" ? "light" : "dark";
 };
 
-const { onLogout } = useApollo()
+const { onLogout } = useApollo();
 
 const handleLogout = async () => {
-  await onLogout()
-  router.push("/login")
+  await onLogout();
+  router.push("/login");
+};
+
+const LOGGED_IN_QUERY = gql`
+query MyQuery($id: Int) {
+  users {
+  id
+    profiles(where: {id: {_eq: $id}}) {
+      email
+      id
+    }
+  }
 }
+
+
+`;
+
+const { data } = useAsyncQuery(LOGGED_IN_QUERY,{id:3})
+
 
 
 </script>

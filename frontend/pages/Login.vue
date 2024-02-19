@@ -58,12 +58,12 @@ console.log(useApollo());
 import gql from "graphql-tag";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-// import { useApollo } from "apollo";
-const email = ref("");
-const password = ref("");
+
 // const email = ref("");
 // const password = ref("");
 const router = useRouter();
+
+
 
 const LOGIN_USER = gql`
   mutation UserLogin($email: String!, $password: String!) {
@@ -113,6 +113,12 @@ const { handleSubmit, errors } = useForm({
   validationSchema,
 });
 
+const { value: password } = useField("password")
+const { value: email} = useField("email")
 
+
+definePageMeta({
+  middleware: "already-auth"
+});
 
 </script>

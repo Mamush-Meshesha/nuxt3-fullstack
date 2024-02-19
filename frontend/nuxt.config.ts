@@ -26,12 +26,6 @@ export default defineNuxtConfig({
   //     'ts-invariant/process',
   //   ],
   // },
-  routes: [
-    {
-      path: '/posts/:id',
-      component: '~/pages/compage/[id].vue',
-    },
-  ],
    
   cloudinary: {
     cloudName: 'dmjtytstd'
@@ -62,9 +56,16 @@ export default defineNuxtConfig({
         httpLinkOptions: {},
         defaultOptions: {},
         inMemoryCacheOptions: {},
+         headers: () => {
+        const authStore = useAuthStore();
+        return {
+          Authorization: authStore.isAuthenticated ? `Bearer ${authStore.accessToken}` : '',
+        };
+      },
      }
     }
   },
+
  primevue: {
     options: { styled: true },
     importPT: { as: 'Lara', from: path.resolve(__dirname, './presets/lara/') },
