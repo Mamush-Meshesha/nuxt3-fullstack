@@ -26,6 +26,7 @@
     "@vue/apollo-composable": "^4.0.1",
     "@vueuse/nuxt": "^10.7.2",
     "graphql-tag": "^2.12.6",
+    "nuxt-primevue": "^0.3.0",
     "pinia": "^2.1.7",
     "react": "^18.2.0"
   }
