@@ -19,6 +19,7 @@
     "vue-router": "^4.2.5"
   },
   "dependencies": {
+    "@nuxtjs/cloudinary": "^2.5.2",
     "@pinia/nuxt": "^0.5.1",
     "@vee-validate/nuxt": "^4.12.5",
     "@vee-validate/zod": "^4.12.5",
