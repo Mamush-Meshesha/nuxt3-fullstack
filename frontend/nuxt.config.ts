@@ -49,7 +49,7 @@ export default defineNuxtConfig({
     authHeader: "Authorization",
     clients: {
       default: {
-        httpEndpoint: "http://localhost:8180/v1/graphql",
+        httpEndpoint: "https://mamush2.hasura.app/v1/graphql",
         tokenStorage: "cookie",
         authHeader: "Authorization",
         tokenName: "accessToken",
