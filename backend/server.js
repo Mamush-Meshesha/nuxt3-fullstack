@@ -10,10 +10,11 @@ const PORT = 3300;
 app.use(express.json());
 app.use(cors());
 // graphqql client
-const client = new GraphQLClient("http://localhost:8180/v1/graphql", {
+const client = new GraphQLClient("https://mamush2.hasura.app/v1/graphql", {
   headers: {
     "Content-Type": "application/json",
-    "x-hasura-admin-secret": "myadminsecretkey",
+    "x-hasura-admin-secret":
+      "UUwT3gQc0G9045QpKARL6XCSxbiQm76wR8J5NWHft94LkU5cjCQGMUJtc4Gr2I6P",
   },
 });
 
