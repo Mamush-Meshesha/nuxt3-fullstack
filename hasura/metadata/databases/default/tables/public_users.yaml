@@ -86,6 +86,8 @@ update_permissions:
         - username
       filter: {}
       check: null
+      set:
+        id: x-hasura-User-Id
     comment: ""
 delete_permissions:
   - role: user

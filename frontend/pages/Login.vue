@@ -39,7 +39,6 @@
             >
               Login
             </button>
-            <button @click="$router.back()">Back</button>
           </div>
         </form>
         <div class="py-20 flex gap-3 ml-[35%]">
@@ -50,6 +49,7 @@
         </div>
       </div>
     </div>
+    lorem30
   </div>
 </template>
 
@@ -58,12 +58,13 @@ console.log(useApollo());
 import gql from "graphql-tag";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useToast } from "primevue/usetoast";
+
+const toast = useToast();
 
 // const email = ref("");
 // const password = ref("");
 const router = useRouter();
-
-
 
 const LOGIN_USER = gql`
   mutation UserLogin($email: String!, $password: String!) {
@@ -82,8 +83,14 @@ const login = async () => {
       password: password.value,
     });
 
-   onLogin(res?.data.login.accessToken);
+    onLogin(res?.data.login.accessToken);
     console.log(res?.data.login.accessToken);
+    toast.add({
+      severity: "success",
+      summary: "Success Message",
+      detail: "Sussesfully Posted",
+      life: 3000,
+    });
     router.push("/home");
   } catch (error) {
     console.error(error);
@@ -113,12 +120,10 @@ const { handleSubmit, errors } = useForm({
   validationSchema,
 });
 
-const { value: password } = useField("password")
-const { value: email} = useField("email")
-
+const { value: password } = useField("password");
+const { value: email } = useField("email");
 
 definePageMeta({
-  middleware: "already-auth"
+  middleware: "already-auth",
 });
-
 </script>

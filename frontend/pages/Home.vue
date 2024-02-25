@@ -8,7 +8,7 @@ const toast = useToast();
 const visible = ref(false);
 const comment = ref("");
 const routes = useRoute();
-const useroute = routes.params.id;
+const idPa = routes.params.id;
 
 const QUERY = gql`
   query MyQuery {
@@ -121,7 +121,7 @@ const { mutate: deleteBooked } = useMutation(DELETE_BOOKED);
 const { mutate: userBookmark } = useMutation(USER_BOOKMARK);
 const { mutate: deleteLike } = useMutation(DELETE_LIKE);
 const { mutate: userLike } = useMutation(USERS_LIKE);
-const { mutate: usersComment } = useMutation(USER_COMMENT);
+
 //users like, comment. bookmarks
 
 const handleLikes = async (post_id, is_liked) => {
@@ -159,27 +159,11 @@ const handleBookmark = async (post_id, is_booked) => {
   }
 };
 
-const handleComment = async (post_id) => {
-  try {
-    await usersComment({
-      post_id: post_id,
-      comment: comment.value,
-    });
-    comment.value = ""
-    toast.add({
-      severity: "success",
-      summary: "Success Message",
-      detail: "Sussesfully Posted",
-      life: 3000,
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
+
 
 definePageMeta({
-  middleware: ["auth"]
-})
+  middleware: ["auth"],
+});
 </script>
 <template>
   <div>
@@ -194,9 +178,7 @@ definePageMeta({
           </div>
           <div v-if="post">
             <div v-if="!isFullTextShown">
-              <h1 class="px-4">
-               
-              </h1>
+              <h1 class="px-4"></h1>
               <button
                 @click="isFullTextShown = true"
                 class="text-[#42bf34] px-4"
@@ -217,7 +199,11 @@ definePageMeta({
             </div>
           </div>
           <div v-if="post" class="px-4 py-4">
-            <img :src="post.url" alt="" class="w-[99%] h-[500px] rounded-md" />
+            <img
+              :src="post.url"
+              alt=""
+              class="w-[99%] h-[500px] rounded-md object-cover"
+            />
           </div>
           <div class="w-[100%] h-20 border border-t-0 items-center flex">
             <div class="flex justify-evenly w-[100%]">
@@ -225,7 +211,8 @@ definePageMeta({
                 @click="handleLikes(post.id, post.is_liked)"
                 class="flex gap-3 items-center"
               >
-                <svg class="dark:fill-[#cfc5c5] "
+                <svg
+                  class="dark:fill-[#cfc5c5]"
                   width="30px"
                   height="30px"
                   viewBox="0 0 24 24"
@@ -246,8 +233,12 @@ definePageMeta({
               </button>
 
               <div class="card flex justify-content-center">
-                <Button @click="visible = true" class="dark:border-none">
-                  <svg class="dark:fill-[#cfc5c5] "
+                <NuxtLink
+                  :to="{name: 'comment-id', params: { id: post.id}}"
+                  class="flex gap-3 items-center"
+                >
+                  <svg
+                    class="dark:fill-[#cfc5c5]"
                     fill="#000"
                     width="30px"
                     height="30px"
@@ -260,50 +251,12 @@ definePageMeta({
                       d="M30.535 28.373c-1.809-1.73-3.119-3.968-3.7-6.485l-0.017-0.088c1.782-1.921 2.888-4.489 2.932-7.315l0-0.009c0-6.686-6.393-12.124-14.25-12.124s-14.25 5.438-14.25 12.124 6.393 12.125 14.25 12.125c0.004 0 0.009 0 0.014 0 1.883 0 3.691-0.319 5.374-0.906l-0.114 0.035c2.528 1.962 5.604 3.343 8.96 3.887l0.115 0.015c0.046 0.010 0.098 0.015 0.152 0.016h0c0.414-0 0.75-0.336 0.75-0.75 0-0.205-0.082-0.39-0.215-0.526l0 0zM21.426 24.348c-0.010-0.009-0.025-0.004-0.035-0.013-0.128-0.11-0.296-0.177-0.479-0.177h-0c-0.022 0-0.039 0.007-0.061 0.009-0.070 0.001-0.137 0.011-0.2 0.030l0.005-0.001c-1.516 0.574-3.269 0.906-5.099 0.906-0.020 0-0.040-0-0.060-0h0.003c-7.030 0-12.75-4.766-12.75-10.625s5.72-10.624 12.75-10.624c7.031 0 12.75 4.766 12.75 10.624-0.024 2.593-1.087 4.934-2.791 6.63l-0 0-0.010 0.026c-0.111 0.124-0.18 0.288-0.183 0.468v0.001c-0.001 0.015-0.002 0.033-0.002 0.050 0 0.007 0 0.014 0 0.022l-0-0.001c-0.002 0.017-0.002 0.037-0.002 0.058 0 0.008 0 0.016 0 0.024l-0-0.001c0.415 2.246 1.34 4.227 2.652 5.887l-0.021-0.028c-2.496-0.614-4.669-1.747-6.49-3.285l0.024 0.019z"
                     ></path>
                   </svg>
-                </Button>
-
-                <form class="flex gap-3 items-center">
-                  <Dialog
-                    v-model:visible="visible"
-                    modal
-                    :style="{ width: '40rem' }"
-                  >
-                    <div class="flex align-items-center flex-col gap-3 mb-3">
-                      <label for="username" class="font-semibold w-6rem"
-                        >comments</label
-                      >
-                      <InputText
-                        v-model="comment"
-                        id="username"
-                        class="flex-auto h-16"
-                        autocomplete="off"
-                        placeholder="Write your comments ..."
-                      />
-                    </div>
-
-                    <div class="flex justify-between gap-2">
-                      <Button
-                        class="bg-[#ba3030] hover:text-[#000] "
-                        type="button"
-                        label="Cancel"
-                        severity="secondary"
-                        @click="visible = false"
-                        >cancel</Button
-                      >
-                      <Button @click="handleComment(post.id)" @click.prevent="visible=false"
-                        type="submit"
-                        class="bg-[#147960] hover:text-[#000]"
-                       
-                      >
-                        send
-                      </Button>
-                    </div>
-                  </Dialog>
                   {{ post.comments_aggregate.aggregate.count }}
-                </form>
+                </NuxtLink>
               </div>
               <button class="flex items-center">
-                <svg class="dark:fill-[#cfc5c5] "
+                <svg
+                  class="dark:fill-[#cfc5c5]"
                   height="30px"
                   width="30px"
                   fill="#000"
@@ -325,7 +278,8 @@ definePageMeta({
                 @click="handleBookmark(post.id, post.is_booked)"
                 class="flex gap-3 items-center"
               >
-                <svg class="dark:fill-[#cfc5c5] "
+                <svg
+                  class="dark:fill-[#cfc5c5]"
                   width="30px"
                   height="30px"
                   viewBox="0 0 24 24"

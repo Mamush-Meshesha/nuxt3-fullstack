@@ -58,7 +58,7 @@
             </button>
           </RouterLink>
           <RouterLink
-            to="/"
+            to="/chat"
             class="w-[100px] md:w-[200px] h-14 rounded-l-xl hover:bg-[#000] focus:text-black text-xl flex items-center px-10"
           >
             <button>Chat</button>
@@ -70,13 +70,13 @@
             <button>Post</button>
           </RouterLink>
           <RouterLink
-            to="/"
+            to="/service"
             class="w-[100px] md:w-[200px] h-14 rounded-l-xl hover:bg-[#000] focus:text-black text-xl flex items-center px-10"
           >
             <button>Services</button>
           </RouterLink>
           <RouterLink
-            to="/"
+            to="/profile"
             class="w-[100px] md:w-[200px] h-14 rounded-l-xl hover:bg-[#000] focus:text-black text-xl flex items-center px-10"
           >
             <button>About Me</button>
@@ -152,13 +152,6 @@
               </div>
             </div>
           </div>
-        </div>
-        <div v-for="user in data?.users" :key="user.id">
-          <ul v-for="profile in user.profiles" :key="profile.id" class="dark:text-white">
-            <span> 
-              {{ profile.email }}
-              </span>  
-          </ul>
         </div>
       </div>
     </div>

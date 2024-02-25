@@ -1,7 +1,7 @@
 <template>
   <div class="h-20 border border-[#2ba5ca] flex items-center">
     <div class="flex justify-between w-[97%]">
-      <div class="flex gap-3 p-6" v-for="user in data?.profile" :key="user.id">
+      <div class="flex gap-3 p-6" v-for="user in data?.users" :key="user.id">
         <div class="relative">
           <img
             src="https://a.storyblok.com/f/191576/1200x800/215e59568f/round_profil_picture_after_.webp"
@@ -48,23 +48,43 @@
 
 <script setup>
 import gql from "graphql-tag";
-
-const Profile_Query = gql`
- query MyQuery {
-  profile(limit: 1) {
-    age
-    education_level
+const QUERY = gql`
+  query MyQuery($user_id: Int) {
+  users(limit: 1) {
     first_name
-    gender
-    id
+    email
     last_name
-    middle_name
-    url
-    user_id
+    username
+    posts {
+      descriptions
+      url
+      id
+      is_liked
+      is_booked
+      likes {
+        id
+      }
+      comments_aggregate {
+        aggregate {
+          count
+        }
+      }
+      likes_aggregate {
+        aggregate {
+          count
+        }
+      }
+      bookmarks_aggregate {
+        aggregate {
+          count
+        }
+      }
+    }
   }
 }
 
+
 `;
 
-const { data } = useAsyncQuery(Profile_Query);
+const { data } = useAsyncQuery(QUERY);
 </script>

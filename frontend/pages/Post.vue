@@ -168,7 +168,6 @@ const handleUserPost = async () => {
   } catch (error) {
     console.log(error);
   }
-  console.log(userPost);
 };
 definePageMeta({
   middleware: ["auth"]
